@@ -2,6 +2,11 @@ import * as THREE from "three";
 import { createCamera } from "./camera.js";
 import { PuzzleArea } from "./objects/PuzzleArea.js";
 
+/**
+ * Sets up the scene, camera, renderer, and lighting, then starts the render loop
+ * @author Peter Hajj
+ */
+
 // Scene: root container for everything that gets rendered
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1a1a1a);
@@ -23,7 +28,7 @@ const dirLight = new THREE.DirectionalLight(0xffffff, 1);
 dirLight.position.set(5, 10, 5);
 scene.add(dirLight);
 
-const puzzleArea = new PuzzleArea();
+const puzzleArea = new PuzzleArea(camera, 500);
 scene.add(puzzleArea);
 
 // Keep the render resolution/aspect in sync with the window
