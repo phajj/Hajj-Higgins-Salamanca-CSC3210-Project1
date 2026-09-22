@@ -56,6 +56,8 @@ window.addEventListener("mousemove", onMouseMove);
 window.addEventListener("mouseup", onMouseUp);
 window.addEventListener("mousedown", onMouseDown);
 
+
+
 /**
  * Handles mouse move events to update the position of the selected puzzle piece
  * @param {*} event the mouse event
@@ -93,12 +95,44 @@ const puzzleGroup = generator.generatePuzzleMesh();
 
 scene.add(puzzleGroup);
 
+// Code grabbed from threejs website.
+// create an AudioListener and add it to the camera
+const listener = new THREE.AudioListener();
+camera.add( listener );
+// create a global audio source
+const snapSound = new THREE.Audio( listener );
+// load a sound and set it as the Audio object's buffer
+const audioLoader = new THREE.AudioLoader();
+audioLoader.load( 'src/sounds/snap.mp3', function( buffer ) {
+	snapSound.setBuffer( buffer );
+	snapSound.setLoop( false );
+	snapSound.setVolume( 0.5 );
+});
+
+const completedListener = new THREE.AudioListener();
+camera.add( completedListener );
+const completedSound = new THREE.Audio( completedListener );
+audioLoader.load( 'src/sounds/complete.mp3', function( buffer ) {
+  completedSound.setBuffer( buffer );
+  completedSound.setLoop( false );
+  completedSound.setVolume( 0.5 );
+});
+
+let completedPieces = 0;
+
 /**
  * Handles mouse up events to stop dragging the selected puzzle piece
  */
 function onMouseUp() {
   if (selectedPiece) {
-    selectedPiece.snapToOriginalIfClose();
+    let snapped = selectedPiece.snapToOriginalIfClose();
+    if (snapped) {
+      snapSound.play();
+      completedPieces++;
+      if (completedPieces == puzzleGroup.children.length) {
+        completedSound.play();
+      }
+    }
   }
 
   isDragging = false;
