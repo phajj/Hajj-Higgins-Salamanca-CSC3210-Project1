@@ -160,13 +160,17 @@ function onMouseDown(event) {
     selectedPiece = mesh.userData.puzzlePiece;
 
     if (selectedPiece) {
-      isDragging = true;
+      if (selectedPiece.isLocked) {
+        selectedPiece = null;
+      } else {
+        isDragging = true;
 
-      // Find where the mouse is on the XY plane
-      raycaster.ray.intersectPlane(dragPlane, dragPoint);
+        // Find where the mouse is on the XY plane
+        raycaster.ray.intersectPlane(dragPlane, dragPoint);
 
-      // Preserve the offset between the mouse and piece
-      selectedPiece.dragOffset.subVectors(selectedPiece.position, dragPoint);
+        // Preserve the offset between the mouse and piece
+        selectedPiece.dragOffset.subVectors(selectedPiece.position, dragPoint);
+      }
     }
   }
 }

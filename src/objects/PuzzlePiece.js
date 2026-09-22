@@ -46,6 +46,8 @@ export class PuzzlePiece extends THREE.Group {
     this.snapThreshold = radius * 0.05;
 
     this.dragOffset = new THREE.Vector3();
+
+    this.isLocked = false;
   }
 
   /**
@@ -59,6 +61,7 @@ export class PuzzlePiece extends THREE.Group {
 
     if (distance <= this.snapThreshold) {
       this.position.copy(this.originalPosition);
+      this.isLocked = true;
       return true;
     }
 
