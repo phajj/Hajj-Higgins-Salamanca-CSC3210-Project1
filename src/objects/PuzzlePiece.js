@@ -6,7 +6,7 @@ import * as THREE from "three";
  * @author Laura Salamanca
  */
 export class PuzzlePiece extends THREE.Group {
-  constructor(points, color, id) {
+  constructor(points, color, id, radius) {
     super();
 
     this.pieceIndex = id;
@@ -42,6 +42,26 @@ export class PuzzlePiece extends THREE.Group {
     // Save starting position
     this.originalPosition = this.position.clone();
 
+    // Distance to where the piece will snap back to if released close enough
+    this.snapThreshold = radius * 0.05;
+
     this.dragOffset = new THREE.Vector3();
+  }
+
+  /**
+   * If the piece's current position is within its snap threshold of its
+   * original position, snaps the piece back to its original position.
+   * Called on drag release.
+   * @returns { boolean } true if the piece snapped back
+   */
+  snapToOriginalIfClose() {
+    const distance = this.position.distanceTo(this.originalPosition);
+
+    if (distance <= this.snapThreshold) {
+      this.position.copy(this.originalPosition);
+      return true;
+    }
+
+    return false;
   }
 }

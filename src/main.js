@@ -97,6 +97,10 @@ scene.add(puzzleGroup);
  * Handles mouse up events to stop dragging the selected puzzle piece
  */
 function onMouseUp() {
+  if (selectedPiece) {
+    selectedPiece.snapToOriginalIfClose();
+  }
+
   isDragging = false;
   selectedPiece = null;
 }

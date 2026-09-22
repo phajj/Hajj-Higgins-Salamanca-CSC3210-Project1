@@ -222,7 +222,7 @@ export class PuzzleGenerator {
         Math.random(),
       );
 
-      const piece = new PuzzlePiece(pieces[i], color, i);
+      const piece = new PuzzlePiece(pieces[i], color, i, this.radius);
 
       group.add(piece);
     }
