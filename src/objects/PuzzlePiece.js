@@ -14,6 +14,17 @@ export class PuzzlePiece extends THREE.Group {
     // Save the original shape
     this.originalPoints = points.map((point) => point.clone());
 
+    // Assisted by Claude
+    // Centroid and bounding radius of the piece's solved-position polygon,
+    // used when scattering the piece to a random spawn location.
+    this.centroid = this.originalPoints
+      .reduce((sum, p) => sum.add(p), new THREE.Vector2())
+      .divideScalar(this.originalPoints.length);
+
+    this.boundingRadius = Math.max(
+      ...this.originalPoints.map((p) => p.distanceTo(this.centroid)),
+    );
+
     const shape = new THREE.Shape();
 
     shape.moveTo(points[0].x, points[0].y);
