@@ -229,4 +229,56 @@ export class PuzzleGenerator {
 
     return group;
   }
+
+  /**
+   * Assisted by Claude
+   * Assigns each piece in the group a random spawn position, redrawing the
+   * coordinates whenever they overlap the puzzle board or an already-placed
+   * piece.
+   * @param {THREE.Group} group the group of PuzzlePiece objects to scatter
+   * @param {number} halfWidth half the width of the visible viewport
+   * @param {number} halfHeight half the height of the visible viewport
+   * @param {number} boardRadius radius of the puzzle board to avoid overlapping
+   */
+  scatterPieces(group, halfWidth, halfHeight, boardRadius) {
+    // Cap how many times we'll redraw a piece's coordinates - some pieces
+    // are big enough (relative to a small window) that a perfectly
+    // non-overlapping spot may not exist, so we fall back to the last
+    // draw rather than looping forever.
+    const maxAttempts = 300;
+
+    for (let i = 0; i < group.children.length; i++) {
+      const piece = group.children[i];
+
+      // Keep the piece fully on-screen regardless of how big it is
+      const marginWidth = Math.max(0, halfWidth - piece.boundingRadius);
+      const marginHeight = Math.max(0, halfHeight - piece.boundingRadius);
+
+      let x, y, overlaps, attempts = 0;
+
+      do {
+        x = THREE.MathUtils.randFloat(-marginWidth, marginWidth);
+        y = THREE.MathUtils.randFloat(-marginHeight, marginHeight);
+
+        // Overlaps the puzzle board if the drawn coordinates fall inside it
+        overlaps = Math.hypot(x, y) < boardRadius;
+
+        for (let j = 0; j < i && !overlaps; j++) {
+          const other = group.children[j];
+          const dist = Math.hypot(
+            x - other.position.x - other.centroid.x,
+            y - other.position.y - other.centroid.y,
+          );
+          overlaps = dist < piece.boundingRadius + other.boundingRadius;
+        }
+
+        attempts++;
+      } while (overlaps && attempts < maxAttempts);
+
+      // Offset the piece so its centroid lands at (x, y). originalPosition
+      // was already captured as (0,0,0) at construction, so this only
+      // changes where the piece starts — snapping back to (0,0,0) still works.
+      piece.position.set(x - piece.centroid.x, y - piece.centroid.y, 0);
+    }
+  }
 }

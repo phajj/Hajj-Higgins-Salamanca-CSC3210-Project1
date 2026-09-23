@@ -86,12 +86,25 @@ function onMouseMove(event) {
 //Generator for the puzzle pieces & points
 const generator = new PuzzleGenerator(puzzleArea.radius);
 
-// Generate and display the random points
-const points = generator.generateRandomPoints();
-points.position.z = 0.01;
-scene.add(points);
+// Generate the random points used to carve up the puzzle pieces (not rendered)
+generator.generateRandomPoints();
 
 const puzzleGroup = generator.generatePuzzleMesh();
+
+// Assisted by Claude
+// Scatter pieces to random spawn positions within the visible viewport,
+// avoiding overlap with the board or other pieces
+const distance = camera.position.z;
+const visibleHeight =
+  2 * distance * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
+const visibleWidth = visibleHeight * camera.aspect;
+
+generator.scatterPieces(
+  puzzleGroup,
+  visibleWidth / 2,
+  visibleHeight / 2,
+  puzzleArea.radius,
+);
 
 scene.add(puzzleGroup);
 
