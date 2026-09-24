@@ -12,6 +12,9 @@ This file records the prompts we gave to AI coding assistents and/or other LLMs 
 - A series of mini prompts to make the index.html front page look the way I wanted and properly wire in the already existing js files
 - "In @src/main.js add a function that takes the puzzlePiece piece as input and changes the hex color by a uniform amount (ie the color was a shade of blue and it gets changed to another simular shade of blue). Name this function highlightColor."
     - Had claude update the solution to make all pieces black
-## Jackson
+## Jackson (using Claude Code CLI)
+- "I want the puzzle pieces to spawn in random location but still keep the functionality of snapping into place"
+    - Generated code was way overengineered so I asked to simplify the logic by replacing the code with a basic for loop that would iterate over each piece and generate random coordinates for it. If those coordinates overlapped with another piece or the puzzle area then the coordinates would be redrawn.
+- "Update the @README.md file to provide an overview of the project and how to play. Include instrucions for how to run it using npm"
 
 ## Laura
