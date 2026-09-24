@@ -1,0 +1,11 @@
+{
+  "name": "puzzle-pandemonium",
+  "version": "1.0.0",
+  "description": "Computer Graphics Project 1: Puzzle Pandemonium",
+  "scripts": {
+    "start": "serve ."
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  }
+}

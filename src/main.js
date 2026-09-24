@@ -56,8 +56,6 @@ window.addEventListener("mousemove", onMouseMove);
 window.addEventListener("mouseup", onMouseUp);
 window.addEventListener("mousedown", onMouseDown);
 
-
-
 /**
  * Handles mouse move events to update the position of the selected puzzle piece
  * @param {*} event the mouse event
@@ -138,11 +136,19 @@ let completedPieces = 0;
  */
 function onMouseUp() {
   if (selectedPiece) {
+    restoreColor(selectedPiece);
+
     let snapped = selectedPiece.snapToOriginalIfClose();
     if (snapped) {
       snapSound.play();
+      // Set snapped piece color to black
+      selectedPiece.children[0].material.color.set(0x000000);
       completedPieces++;
       if (completedPieces == puzzleGroup.children.length) {
+        // Set all pieces to white
+        puzzleGroup.children.forEach((piece) => {
+          piece.children[0].material.color.set(0xffffff);
+        });
         completedSound.play();
       }
     }
@@ -150,6 +156,42 @@ function onMouseUp() {
 
   isDragging = false;
   selectedPiece = null;
+}
+
+/**
+ * Shifts the color of a puzzle piece to a similar shade by changing its
+ * lightness by a uniform amount (hue and saturation stay the same)
+ * @param {*} piece the puzzle piece to highlight
+ */
+function highlightColor(piece) {
+  const amount = 0.15;
+
+  piece.traverse((child) => {
+    if (child.isMesh && child.material) {
+      // Save the original color so it can be restored on mouse up
+      child.userData.originalColor = child.material.color.clone();
+
+      const hsl = {};
+      child.material.color.getHSL(hsl);
+
+      // Lighten the color, or darken it if it's already too light to lighten
+      const offset = hsl.l + amount > 1 ? -amount : amount;
+      child.material.color.offsetHSL(0, 0, offset);
+    }
+  });
+}
+
+/**
+ * Restores a puzzle piece to the color it had before highlightColor was called
+ * @param {*} piece the puzzle piece to restore
+ */
+function restoreColor(piece) {
+  piece.traverse((child) => {
+    if (child.isMesh && child.userData.originalColor) {
+      child.material.color.copy(child.userData.originalColor);
+      delete child.userData.originalColor;
+    }
+  });
 }
 
 /**
@@ -183,6 +225,8 @@ function onMouseDown(event) {
 
         // Preserve the offset between the mouse and piece
         selectedPiece.dragOffset.subVectors(selectedPiece.position, dragPoint);
+
+        highlightColor(selectedPiece);
       }
     }
   }
