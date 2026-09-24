@@ -10,6 +10,8 @@ This file records the prompts we gave to AI coding assistents and/or other LLMs 
     - Had claude make a duplicate octogon to make a makeshift border around the first.
 - " Add jdocs at the start of the other files just like @src/objects/PuzzleArea.js, in @src/objects/PuzzlePiece.js do not put anything"  (used claude to update my documentation following the format I had already written. It didn't do it perfectly but I revised it myself)
 - A series of mini prompts to make the index.html front page look the way I wanted and properly wire in the already existing js files
+- "In @src/main.js add a function that takes the puzzlePiece piece as input and changes the hex color by a uniform amount (ie the color was a shade of blue and it gets changed to another simular shade of blue). Name this function highlightColor."
+    - Had claude update the solution to make all pieces black
 ## Jackson
 
 ## Laura
