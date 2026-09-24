@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { PuzzlePiece } from "./PuzzlePiece.js";
 /**
  * This object is responsible for helping to generate the puzzle pieces for the octagon puzzle
- * Assisted by Chat GPT
  * @author Laura Salamanca
  */
 export class PuzzleGenerator {
@@ -100,6 +99,7 @@ export class PuzzleGenerator {
 
   /**
    * Clips a polygon with a line defined by two points
+   * Assisted by ChatGPT
    * @param {*} polygon the polygon to clip
    * @param {*} a the first point defining the line
    * @param {*} b the second point defining the line
@@ -144,6 +144,7 @@ export class PuzzleGenerator {
 
   /**
    * Gets the intersection point of a line and a plane
+   * Assisted by ChatGPT
    * @param {*} p1 the first point on the line
    * @param {*} p2 the second point on the line
    * @param {*} dx the x-component of the plane normal
@@ -167,6 +168,7 @@ export class PuzzleGenerator {
 
   /**
    * Generates the puzzle pieces by clipping the octagon with the random points
+   * Assisted by ChatGPT
    * @returns an array of arrays of THREE.Vector2 objects representing the puzzle pieces
    */
   generatePuzzlePieces() {
@@ -254,7 +256,10 @@ export class PuzzleGenerator {
       const marginWidth = Math.max(0, halfWidth - piece.boundingRadius);
       const marginHeight = Math.max(0, halfHeight - piece.boundingRadius);
 
-      let x, y, overlaps, attempts = 0;
+      let x,
+        y,
+        overlaps,
+        attempts = 0;
 
       do {
         x = THREE.MathUtils.randFloat(-marginWidth, marginWidth);
